@@ -14,6 +14,9 @@ namespace ProyectoOpenTk
 
         float theta = 0f;
 
+        T obj1;
+        T obj2;
+
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
@@ -22,6 +25,10 @@ namespace ProyectoOpenTk
 
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Lequal);
+
+            obj1 = new T(20, 0, 0);
+
+            obj2 = new T(0, 0, 0);
 
         }
 
@@ -38,157 +45,8 @@ namespace ProyectoOpenTk
             GL.Rotate(theta, 0.0, 0.5, 0.0);
 
 
-            GL.Color4(Color4.Blue);
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(-3f, 0f, -3f);
-            GL.Vertex3(3f, 0f, -3f);
-            GL.Vertex3(3f, 0f, 3f);
-            GL.Vertex3(-3f, 0f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(-9f, 24f, 3f);
-            GL.Vertex3(9f, 24f, 3f);
-            GL.Vertex3(9f, 18f, 3f);
-            GL.Vertex3(-9f, 18f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(3f, 18f, 3f);
-            GL.Vertex3(3f, 0f, 3f);
-            GL.Vertex3(-3f, 0f, 3f);
-            GL.Vertex3(-3f, 18f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(3f, 0f, -3f);
-            GL.Vertex3(3f, 0f, 3f);
-            GL.Vertex3(3f, 18f, 3f);
-            GL.Vertex3(3f, 18f, -3f);
-            GL.End();
-
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(-3f, 0f, 3f);
-            GL.Vertex3(-3f, 0f, -3f);
-            GL.Vertex3(-3f, 18f, -3f);
-            GL.Vertex3(-3f, 18f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(-9f, 24f, 3f);
-            GL.Vertex3(-9f, 24f, -3f);
-            GL.Vertex3(9f, 24f, -3f);
-            GL.Vertex3(9f, 24f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(-9f, 24f, -3f);
-            GL.Vertex3(9f, 24f, -3f);
-            GL.Vertex3(9f, 18f, -3f);
-            GL.Vertex3(-9f, 18f, -3f);
-            GL.End();
-
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(3f, 18f, -3f);
-            GL.Vertex3(3f, 0f, -3f);
-            GL.Vertex3(-3f, 0f, -3f);
-            GL.Vertex3(-3f, 18f, -3f);
-            GL.End();
-
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(-9f, 24f, 3f);
-            GL.Vertex3(-9f, 24f, -3f);
-            GL.Vertex3(9f, 24f, -3f);
-            GL.Vertex3(9f, 24f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(9f, 24f, 3f);
-            GL.Vertex3(9f, 24f, -3f);
-            GL.Vertex3(9f, 18f, -3f);
-            GL.Vertex3(9f, 18f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.Polygon);
-            GL.Vertex3(-9f, 24f, 3f);
-            GL.Vertex3(-9f, 24f, -3f);
-            GL.Vertex3(-9f, 18f, -3f);
-            GL.Vertex3(-9f, 18f, 3f);
-            GL.End();
-
-            //----
-
-            GL.Color4(Color4.Black);
-            GL.Begin(BeginMode.LineLoop);
-            GL.Vertex3(-3f, 0f, -3f);
-            GL.Vertex3(3f, 0f, -3f);
-            GL.Vertex3(3f, 0f, 3f);
-            GL.Vertex3(-3f, 0f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.LineLoop);
-            GL.Vertex3(-9f, 24f, 3f);
-            GL.Vertex3(9f, 24f, 3f);
-            GL.Vertex3(9f, 18f, 3f);
-            GL.Vertex3(3f, 18f, 3f);
-            GL.Vertex3(3f, 0f, 3f);
-            GL.Vertex3(-3f, 0f, 3f);
-            GL.Vertex3(-3f, 18f, 3f);
-            GL.Vertex3(-9f, 18f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.LineLoop);
-            GL.Vertex3(3f, 0f, -3f);
-            GL.Vertex3(3f, 0f, 3f);
-            GL.Vertex3(3f, 18f, 3f);
-            GL.Vertex3(3f, 18f, -3f);
-            GL.End();
-
-            GL.Begin(BeginMode.LineLoop);
-            GL.Vertex3(-3f, 0f, 3f);
-            GL.Vertex3(-3f, 0f, -3f);
-            GL.Vertex3(-3f, 18f, -3f);
-            GL.Vertex3(-3f, 18f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.LineLoop);
-            GL.Vertex3(-9f, 24f, 3f);
-            GL.Vertex3(-9f, 24f, -3f);
-            GL.Vertex3(9f, 24f, -3f);
-            GL.Vertex3(9f, 24f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.LineLoop);
-            GL.Vertex3(-9f, 24f, -3f);
-            GL.Vertex3(9f, 24f, -3f);
-            GL.Vertex3(9f, 18f, -3f);
-            GL.Vertex3(3f, 18f, -3f);
-            GL.Vertex3(3f, 0f, -3f);
-            GL.Vertex3(-3f, 0f, -3f);
-            GL.Vertex3(-3f, 18f, -3f);
-            GL.Vertex3(-9f, 18f, -3f);
-            GL.End();
-
-            GL.Begin(BeginMode.LineLoop);
-            GL.Vertex3(-9f, 24f, 3f);
-            GL.Vertex3(-9f, 24f, -3f);
-            GL.Vertex3(9f, 24f, -3f);
-            GL.Vertex3(9f, 24f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.LineLoop);
-            GL.Vertex3(9f, 24f, 3f);
-            GL.Vertex3(9f, 24f, -3f);
-            GL.Vertex3(9f, 18f, -3f);
-            GL.Vertex3(9f, 18f, 3f);
-            GL.End();
-
-            GL.Begin(BeginMode.LineLoop);
-            GL.Vertex3(-9f, 24f, 3f);
-            GL.Vertex3(-9f, 24f, -3f);
-            GL.Vertex3(-9f, 18f, -3f);
-            GL.Vertex3(-9f, 18f, 3f);
-            GL.End();
+            obj1.Draw();
+            obj2.Draw();
 
             theta += 1.0f;
             if (theta > 360) theta -= 360;

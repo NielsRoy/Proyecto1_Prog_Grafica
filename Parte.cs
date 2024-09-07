@@ -6,18 +6,14 @@ namespace ProyectoOpenTk
 {
     public class Parte
     {
-        public Vertice centro;
-        public List<Poligono> poligonos;
+        public Vertice centro = new Vertice(0, 0, 0);
+        public List<Poligono> poligonos = new List<Poligono>();
 
-        public Parte()
-        {
-            centro = new Vertice(0, 0, 0);
-        }
+        public Parte() {}
 
         public Parte(float x, float y, float z)
         {
             centro = new Vertice(x, y, z);
-            poligonos = new List<Poligono>();
         }
 
         public void AddPoligono(Poligono p)

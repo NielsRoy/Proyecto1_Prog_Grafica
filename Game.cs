@@ -2,6 +2,7 @@
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using ProyectoOpenTk.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,7 +15,7 @@ namespace ProyectoOpenTk
 
         float theta = 0f;
 
-        Escenario esc = new Escenario();
+        Escenario esc = new Escenario(20, 0, 0);
 
         protected override void OnLoad(EventArgs e)
         {
@@ -25,7 +26,10 @@ namespace ProyectoOpenTk
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Lequal);
 
-            esc.AddObjeto("T", T.getObjeto());
+            //esc.AddObjeto("T", T.getObjeto());
+            esc = Serializer.Load<Escenario>("escenario1.json");
+            
+            //Serializer.save(esc, "escenario1.json");
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)

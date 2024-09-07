@@ -9,27 +9,14 @@ namespace ProyectoOpenTk
 {
     public class Poligono
     {
-        public Color4 color;
+        public Color4 color = Color4.Gray;
+        public List<Vertice> vertices = new List<Vertice>();
 
-        public List<Vertice> vertices;
-
-        //private Matrix4 transformations;
-        //private Matrix4 iTransformations;
-
-        public Poligono()
-        {
-            vertices = new List<Vertice>();
-            color = Color4.Gray;
-            //transformations = Matrix4.Identity;
-            //iTransformations = Matrix4.Identity;
-        }
+        public Poligono() {}
 
         public Poligono(Color4 color)
         {
-            vertices = new List<Vertice>();
             this.color = color;
-            //transformations = Matrix4.Identity;
-            //iTransformations = Matrix4.Identity;
         }
 
         public void AddVertice(float x, float y, float z)
@@ -54,9 +41,6 @@ namespace ProyectoOpenTk
                 GL.Vertex3(v.X, v.Y, v.Z);
             }
             GL.End();
-
-            //iTransformations = Matrix4.Identity;
-            //transformations = Matrix4.Identity;
         }
     }
 }

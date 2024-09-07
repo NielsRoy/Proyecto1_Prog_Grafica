@@ -6,18 +6,14 @@ namespace ProyectoOpenTk
 {
     public class Objeto
     {
-        public Vertice centro;
-        public Dictionary<string, Parte> partes;
+        public Vertice centro = new Vertice(0, 0, 0);
+        public Dictionary<string, Parte> partes = new Dictionary<string, Parte>();
 
-        public Objeto()
-        {
-            centro = new Vertice(0, 0, 0);
-        }
+        public Objeto() {}
 
         public Objeto(float x, float y, float z)
         {
             centro = new Vertice(x, y, z);
-            partes = new Dictionary<string, Parte>();
         }
 
         public void AddParte(string name, Parte p)
@@ -32,7 +28,6 @@ namespace ProyectoOpenTk
         {
             foreach (Parte p in partes.Values)
             {
-                //Vertice c = new Vertice(origin.X + centro.X, origin.Y + centro.Y, origin.Z + centro.Z);
                 p.Draw();
             }
         }

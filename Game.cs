@@ -14,8 +14,7 @@ namespace ProyectoOpenTk
 
         float theta = 0f;
 
-        T obj1;
-        T obj2;
+        Escenario esc = new Escenario();
 
         protected override void OnLoad(EventArgs e)
         {
@@ -26,10 +25,7 @@ namespace ProyectoOpenTk
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Lequal);
 
-            obj1 = new T(20, 0, 0);
-
-            obj2 = new T(0, 0, 0);
-
+            esc.AddObjeto("T", T.getObjeto());
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -45,8 +41,7 @@ namespace ProyectoOpenTk
             GL.Rotate(theta, 0.0, 0.5, 0.0);
 
 
-            obj1.Draw();
-            obj2.Draw();
+            esc.Draw();
 
             theta += 1.0f;
             if (theta > 360) theta -= 360;

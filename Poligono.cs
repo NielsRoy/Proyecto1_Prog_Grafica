@@ -26,11 +26,12 @@ namespace ProyectoOpenTk
 
         public void Draw()
         {
-            GL.Color4(Color4.Black);
+            GL.Color4(Color4.Orange);
             GL.Begin(BeginMode.LineLoop);
             foreach (Vertice v in vertices)
             {
                 GL.Vertex3(v.X, v.Y, v.Z);
+                //GL.Vertex4(v.ToVector4());
             }
             GL.End();
 

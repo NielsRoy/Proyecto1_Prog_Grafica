@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -29,6 +30,46 @@ namespace ProyectoOpenTk
             foreach (Parte p in partes.Values)
             {
                 p.Draw();
+            }
+        }
+
+        public void Translate(float x, float y, float z)
+        {
+            Transform(Matrix4.CreateTranslation(x, y, z));
+        }
+
+        public void Scale(float x, float y, float z)
+        {
+            Transform(Matrix4.CreateScale(x, y, z));
+        }
+
+        public void Rotate(float angle, float x, float y, float z)
+        {
+            angle = MathHelper.DegreesToRadians(angle);
+
+            Matrix4 toOrigin = Matrix4.CreateTranslation(-centro.X, -centro.Y, -centro.Z);
+            Matrix4 r = Matrix4.CreateRotationX(angle * x);
+            r = Matrix4.Mult(r, Matrix4.CreateRotationY(angle * y));
+            r = Matrix4.Mult(r, Matrix4.CreateRotationZ(angle * z));
+            Matrix4 toOriginal = Matrix4.CreateTranslation(centro.X, centro.Y, centro.Z);
+
+            Matrix4 t = Matrix4.Mult(toOrigin, r);
+            t = Matrix4.Mult(t, toOriginal);
+
+            Transform(t);
+        }
+
+        private void Transform(Matrix4 m)
+        {
+            foreach (Parte p in partes.Values)
+            {
+                foreach (Poligono pol in p.poligonos)
+                {
+                    foreach (Vertice v in pol.vertices)
+                    {
+                        v.setValues(Vector4.Transform(v.ToVector4(), m));
+                    }
+                }
             }
         }
     }

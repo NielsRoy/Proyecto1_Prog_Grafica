@@ -1,13 +1,11 @@
 ﻿using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace ProyectoOpenTk
+namespace ProyectoOpenTk.Estructura3D
 {
-    public class Poligono
+    public class Poligono : IDrawable
     {
         public Color4 color = Color4.Gray;
         public List<Vertice> vertices = new List<Vertice>();
@@ -26,7 +24,7 @@ namespace ProyectoOpenTk
 
         public void Draw()
         {
-            GL.Color4(Color4.Orange);
+            GL.Color4(Color4.Black);
             GL.Begin(BeginMode.LineLoop);
             foreach (Vertice v in vertices)
             {
@@ -42,6 +40,14 @@ namespace ProyectoOpenTk
                 GL.Vertex3(v.X, v.Y, v.Z);
             }
             GL.End();
+        }
+
+        public void ApplyTransform(Matrix4 transform)
+        {
+            foreach (Vertice v in vertices)
+            {
+                v.ApplyTransform(transform);
+            }
         }
     }
 }

@@ -2,6 +2,8 @@
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
+using ProyectoOpenTk.Estructura3D;
+using ProyectoOpenTk.EstructuraAnimacion;
 using ProyectoOpenTk.Utilities;
 using System;
 using System.Collections.Generic;
@@ -17,20 +19,11 @@ namespace ProyectoOpenTk
 
         float theta = 0f;
 
-        Escenario esc = new Escenario(3, 0, 0);
+        Escenario escenario = new Escenario(0, 0, 0);
+        Animator animator = new Animator();
+        Libreto libreto;
 
-        Stopwatch stopwatch = new Stopwatch();
-        const float maxFps = 30;
-        const float animationDuration = 5;
-        const float animationDurationMilliseconds = 5000;
-        //float startAngle = 0f;
-        const float totalRotation = 720;
-        const float step = totalRotation / (maxFps * animationDuration);
-
-        const float deltaTime = 1000 / maxFps;
-        float currentTimeLimit = deltaTime;
-
-        float c = 0;
+        bool first = true;
 
         protected override void OnLoad(EventArgs e)
         {
@@ -41,11 +34,21 @@ namespace ProyectoOpenTk
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunction.Lequal);
 
-            cargarEscenario(esc);
-            //esc = Serializer.Load<Escenario>("escenario1.json");
 
-            //Serializer.save(esc, "escenario1.json");
-            stopwatch.Start();
+            //Objeto T = Serializer.LoadObj("T.obj");
+            //Objeto human = Serializer.LoadObj("steve.obj");
+            //Objeto ball = Serializer.LoadObj("balon.obj");
+
+            //escenario.objetos.Add("T", T);
+            //escenario.objetos.Add("humano", human);
+            //escenario.objetos.Add("balon", ball);
+
+            escenario = Serializer.LoadJson<Escenario>("escenario.json");
+            escenario.objetos["humano"].partes["brazo_derecho.001"].centro.setValues(16.722f, 14.5275f, 3.7549f);
+            escenario.objetos["humano"].partes["brazo_izquierdo.001"].centro.setValues(17.6436f, 14.5025f, -3.70694f);
+            escenario.objetos["humano"].partes["pierna_derecha.001"].centro.setValues(17.4069f, 8.66231f, 1.2785f);
+            escenario.objetos["humano"].partes["pierna_izquierda.001"].centro.setValues(16.8673f, 8.63649f, -1.28736f);
+            libreto = Animacion.getLibreto(escenario);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -55,35 +58,20 @@ namespace ProyectoOpenTk
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             
             GL.LoadIdentity();
-            GL.Translate(0, 0, -50);
-            //GL.Rotate(theta, 0.0, 0.5, 0.0);
-
-            //esc.Translate(1,0,0);
-            esc.Draw();
+            GL.Translate(0, 0, -80);
+            //GL.Rotate(theta, 0, 1, 0);
             
-            if (stopwatch.Elapsed.TotalMilliseconds < animationDurationMilliseconds)
-            {
-                float elapsedTime = (float)stopwatch.Elapsed.TotalMilliseconds;
-                //Console.WriteLine(elapsedTime.ToString());
-                //float progress = elapsedTime / animationDuration;
-                if (elapsedTime > currentTimeLimit)
-                {
-                    Console.WriteLine(currentTimeLimit);
+            escenario.Draw();
 
-                    //esc.Rotate(step, 0, 1, 0);
-                    //esc.objetos["T"].Rotate(step, 0, 1, 0);
-                    esc.objetos["T"].partes["cabeza"].Rotate(step, 0, 1, 0);
+            //if (first)
+            //{ 
+            //    esc.objetos["T"].partes["cabeza"].Translate(10, 0, 0);
+            //    esc.objetos["T3"].partes["cabeza"].Translate(0, 10, 1);
+            //    first = false;
+            //}
 
-
-                    c++;
-                    Console.WriteLine(c);
-                    
-                    currentTimeLimit += deltaTime;
-                }
-            }
-
-            //theta += 1.0f;
-            //if (theta > 360) theta -= 360;
+            theta += 1.0f;
+            if (theta > 360) theta -= 360;
 
             Context.SwapBuffers();
         }
@@ -110,105 +98,13 @@ namespace ProyectoOpenTk
             {
                 Exit();
             }
-        }
 
-        private void cargarEscenario(Escenario e)
-        {
-            Objeto obj = new Objeto(5, -10, 0);
-            e.AddObjeto("T", obj);    
-
-            Parte superior = new Parte(0, 0, 0);
-            obj.AddParte("cabeza", superior);
-
-            Poligono p1 = new Poligono(Color4.Blue);
-            p1.AddVertice(-9, 24, 3);
-            p1.AddVertice(-9, 24, -3);
-            p1.AddVertice(-9, 18, -3);
-            p1.AddVertice(-9, 18, 3);
-            superior.AddPoligono(p1);
-
-            Poligono p2 = new Poligono(Color4.Green);
-            p2.AddVertice(-9, 24, 3);
-            p2.AddVertice(9, 24, 3);
-            p2.AddVertice(9, 18, 3);
-            p2.AddVertice(-9, 18, 3);
-            superior.AddPoligono(p2);
-
-            Poligono p3 = new Poligono(Color4.Green);
-            p3.AddVertice(-9, 18, 3);
-            p3.AddVertice(-9, 18, -3);
-            p3.AddVertice(9, 18, -3);
-            p3.AddVertice(9, 18, 3);
-            superior.AddPoligono(p3);
-
-            Poligono p4 = new Poligono(Color4.Aquamarine);
-            p4.AddVertice(-9, 18, -3);
-            p4.AddVertice(-9, 24, -3);
-            p4.AddVertice(9, 24, -3);
-            p4.AddVertice(9, 18, -3);
-            superior.AddPoligono(p4);
-
-            Poligono p5 = new Poligono(Color4.Green);
-            p5.AddVertice(-9, 24, 3);
-            p5.AddVertice(-9, 24, -3);
-            p5.AddVertice(9, 24, -3);
-            p5.AddVertice(9, 24, 3);
-            superior.AddPoligono(p5);
-
-            Poligono p6 = new Poligono(Color4.Green);
-            p6.AddVertice(9, 24, 3);
-            p6.AddVertice(9, 24, -3);
-            p6.AddVertice(9, 18, -3);
-            p6.AddVertice(9, 18, 3);
-            superior.AddPoligono(p6);
-
-
-
-            Parte inferior = new Parte(5, -5, 0);
-            obj.AddParte("cuerpo", inferior);
-
-            Poligono p7 = new Poligono(Color4.Yellow);
-            p7.AddVertice(-3, 18, 3);
-            p7.AddVertice(3, 18, 3);
-            p7.AddVertice(3, 0, 3);
-            p7.AddVertice(-3, 0, 3);
-            inferior.AddPoligono(p7);
-
-            Poligono p8 = new Poligono(Color4.Coral);
-            p8.AddVertice(-3, 18, -3);
-            p8.AddVertice(3, 18, -3);
-            p8.AddVertice(3, 0, -3);
-            p8.AddVertice(-3, 0, -3);
-            inferior.AddPoligono(p8);
-
-            Poligono p9 = new Poligono(Color4.Yellow);
-            p9.AddVertice(-3, 18, 3);
-            p9.AddVertice(-3, 18, -3);
-            p9.AddVertice(-3, 0, -3);
-            p9.AddVertice(-3, 0, 3);
-            inferior.AddPoligono(p9);
-
-            Poligono p10 = new Poligono(Color4.Yellow);
-            p10.AddVertice(3, 18, 3);
-            p10.AddVertice(3, 18, -3);
-            p10.AddVertice(3, 0, -3);
-            p10.AddVertice(3, 0, 3);
-            inferior.AddPoligono(p10);
-
-            Poligono p11 = new Poligono(Color4.Yellow);
-            p11.AddVertice(-3, 18, 3);
-            p11.AddVertice(-3, 18, -3);
-            p11.AddVertice(3, 18, -3);
-            p11.AddVertice(3, 18, 3);
-            inferior.AddPoligono(p11);
-
-            Poligono p12 = new Poligono(Color4.Yellow);
-            p12.AddVertice(-3, 0, 3);
-            p12.AddVertice(-3, 0, -3);
-            p12.AddVertice(3, 0, -3);
-            p12.AddVertice(3, 0, 3);
-            inferior.AddPoligono(p12);
-
+            if (input.IsKeyDown(Key.Space) && first)
+            {
+                Console.WriteLine("Animacion");
+                animator.Run(libreto);
+                first = false;
+            }
         }
     }
 }

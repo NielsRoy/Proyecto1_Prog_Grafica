@@ -6,10 +6,6 @@ using ProyectoOpenTk.Estructura3D;
 using ProyectoOpenTk.EstructuraAnimacion;
 using ProyectoOpenTk.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Threading;
 
 namespace ProyectoOpenTk
 {
@@ -17,13 +13,11 @@ namespace ProyectoOpenTk
     {
         public Game(int width, int height, string title) : base(width, height, GraphicsMode.Default, title) { }
 
-        float theta = 0f;
-
         Escenario escenario = new Escenario(0, 0, 0);
         Animator animator = new Animator();
         Libreto libreto;
 
-        bool first = true;
+        bool running = true;
 
         protected override void OnLoad(EventArgs e)
         {
@@ -36,18 +30,22 @@ namespace ProyectoOpenTk
 
 
             //Objeto T = Serializer.LoadObj("T.obj");
-            //Objeto human = Serializer.LoadObj("steve.obj");
+            //Objeto human = Serializer.LoadObj("robot.obj");
             //Objeto ball = Serializer.LoadObj("balon.obj");
 
             //escenario.objetos.Add("T", T);
-            //escenario.objetos.Add("humano", human);
+            //escenario.objetos.Add("robot", human);
             //escenario.objetos.Add("balon", ball);
 
-            escenario = Serializer.LoadJson<Escenario>("escenario.json");
-            escenario.objetos["humano"].partes["brazo_derecho.001"].centro.setValues(16.722f, 14.5275f, 3.7549f);
-            escenario.objetos["humano"].partes["brazo_izquierdo.001"].centro.setValues(17.6436f, 14.5025f, -3.70694f);
-            escenario.objetos["humano"].partes["pierna_derecha.001"].centro.setValues(17.4069f, 8.66231f, 1.2785f);
-            escenario.objetos["humano"].partes["pierna_izquierda.001"].centro.setValues(16.8673f, 8.63649f, -1.28736f);
+            escenario = Serializer.LoadJson<Escenario>("escenario2.json");
+            escenario.objetos["balon"].SetCenterToGeometry();
+            //TODO: Agregar centro de masa al balon
+
+            //escenario.objetos["humano"].partes["brazo_derecho.001"].centro.setValues(16.722f, 14.5275f, 3.7549f);
+            //escenario.objetos["humano"].partes["brazo_izquierdo.001"].centro.setValues(17.6436f, 14.5025f, -3.70694f);
+            //escenario.objetos["humano"].partes["pierna_derecha.001"].centro.setValues(17.4069f, 8.66231f, 1.2785f);
+            //escenario.objetos["humano"].partes["pierna_izquierda.001"].centro.setValues(16.8673f, 8.63649f, -1.28736f);
+            //Serializer.SaveJson(escenario, "escenario2.json");
             libreto = Animacion.getLibreto(escenario);
         }
 
@@ -58,20 +56,15 @@ namespace ProyectoOpenTk
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             
             GL.LoadIdentity();
-            GL.Translate(0, 0, -80);
+            GL.Translate(0, 0, -60);
+            GL.Rotate(20, 1, 0, 0);
+
             //GL.Rotate(theta, 0, 1, 0);
-            
+
             escenario.Draw();
 
-            //if (first)
-            //{ 
-            //    esc.objetos["T"].partes["cabeza"].Translate(10, 0, 0);
-            //    esc.objetos["T3"].partes["cabeza"].Translate(0, 10, 1);
-            //    first = false;
-            //}
-
-            theta += 1.0f;
-            if (theta > 360) theta -= 360;
+            //theta += 1.0f;
+            //if (theta > 360) theta -= 360;
 
             Context.SwapBuffers();
         }
@@ -99,11 +92,11 @@ namespace ProyectoOpenTk
                 Exit();
             }
 
-            if (input.IsKeyDown(Key.Space) && first)
+            if (running && input.IsKeyDown(Key.Space))
             {
                 Console.WriteLine("Animacion");
                 animator.Run(libreto);
-                first = false;
+                running = false;
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using OpenTK;
-using System.Collections.Generic;
 
 namespace ProyectoOpenTk.Estructura3D
 {

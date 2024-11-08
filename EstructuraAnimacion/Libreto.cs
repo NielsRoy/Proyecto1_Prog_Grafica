@@ -6,7 +6,7 @@ namespace ProyectoOpenTk.EstructuraAnimacion
 {
     public class Libreto
     {
-        public List<Escena> escenas = new List<Escena>();    //Deberia ser privado pero ¿y la serializacion?
+        public List<Escena> escenas = new List<Escena>();
         public float duracion;  //Tiempo en milisegundos
         private int currentIndex = -1;
 
@@ -17,16 +17,10 @@ namespace ProyectoOpenTk.EstructuraAnimacion
 
         public void AddEscena(Escena escena)
         {
-            if (escena.duracion > duracion) return;   //O no es necesario ?
+            if (escena.duracion > duracion) return;
 
             escenas.Add(escena);
-            //escenas.Enqueue(escena);
         }
-
-        //public Escena getNextEscena()
-        //{
-        //    return escenas.Dequeue();
-        //}
 
         public void RemoveEscena(Escena escena)
         {
@@ -40,6 +34,7 @@ namespace ProyectoOpenTk.EstructuraAnimacion
 
         public Escena getNextEscena()
         {
+            if (currentIndex >= escenas.Count) return null;
             currentIndex++;
             return (currentIndex < escenas.Count) ? escenas[currentIndex] : null;
         }

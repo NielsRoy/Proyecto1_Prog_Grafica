@@ -10,61 +10,82 @@ namespace ProyectoOpenTk.Utilities
     public class Animator
     {
         public Libreto libreto;
-        const float fpsTarget = 120;
+        const float fpsTarget = 60;
         //milisegundos
-        public float tiempoTranscurrido = 0;
-        private long quantum = 10;    
+        public double tiempoTranscurrido = 0;
+        private int quantum = 10;    
 
         private float fps = fpsTarget / 1000;
         private float spf = 1000 / fpsTarget;
-        //usar double ?
+
+        private Stopwatch timer = new Stopwatch();
+
         private void Animate()
         {
             Console.WriteLine("Inicio animacion");
-            Stopwatch timer = new Stopwatch();
-            Escena escena = libreto.getNextEscena();
-            float duracionEscena = escena.duracion;
-            Stopwatch quantumController = new Stopwatch();
+
             timer.Start();
             while (tiempoTranscurrido < libreto.duracion)
             {
-                while (tiempoTranscurrido < duracionEscena && tiempoTranscurrido < libreto.duracion)
+                Escena escena = libreto.getNextEscena();
+                if (escena != null)
                 {
-                    List<Accion> acciones = new List<Accion>(escena.acciones);
-                    foreach (Accion accion in acciones)
-                    {
-                        if (accion.duracion <= 0)
-                        {
-                            escena.removeAccion(accion);
-                            continue;
-                        }
-                        if (tiempoTranscurrido < accion.tiempoInicio) continue;
-
-                        float currentQuantum = 0;
-                        quantumController.Start();
-                        float tiempoPorFrame = 0;
-                        while (currentQuantum < quantum)
-                        {
-                            if (currentQuantum >= tiempoPorFrame)
-                            { 
-                                float step = accion.objetivo / (fps * accion.duracion);
-                                accion.Apply(step);
-                                tiempoPorFrame += spf;
-                            }
-                            
-                            currentQuantum = (float)quantumController.Elapsed.TotalMilliseconds;
-                        }
-                        escena.actualizarDuracionAcciones(currentQuantum);
-                        quantumController.Reset();
-                        tiempoTranscurrido = (float)timer.Elapsed.TotalMilliseconds;
-                    }
-                    tiempoTranscurrido = (float)timer.Elapsed.TotalMilliseconds;
+                    Execute(escena);
+                    Console.WriteLine("Escena ejecutada");
                 }
-                escena = libreto.getNextEscena();
-                duracionEscena += escena?.duracion ?? 0;
-                tiempoTranscurrido = (float)timer.Elapsed.TotalMilliseconds;
+                tiempoTranscurrido = timer.Elapsed.TotalMilliseconds;
             }
+            timer.Reset();
+
             Console.WriteLine("Fin animacion");
+        }
+
+        private void Execute(Escena e)
+        {
+            e.EliminarAccionesSinDuracion();
+            Stopwatch quantumController = new Stopwatch();
+            List<Accion> acciones = e.acciones;
+            while (DentroDelTiempo(e))
+            {
+                int i = 0;
+                while (DentroDelTiempo(e) && i < acciones.Count)
+                {
+                    Accion a = acciones[i];
+                    if (a.tiempoRestante <= 0) { 
+                        i++;
+                        continue; 
+                    }
+
+                    if (tiempoTranscurrido < a.tiempoInicio) {
+                        i++;
+                        continue;
+                    }
+
+                    double currentQuantum = 0;
+                    double tiempoPorFrame = 0;
+                    quantumController.Start();
+                    while (DentroDelTiempo(e) && currentQuantum < quantum)
+                    {
+                        if (currentQuantum >= tiempoPorFrame)
+                        {
+                            a.Run(fps);
+                            tiempoPorFrame += spf;
+                        }
+                        currentQuantum = quantumController.Elapsed.TotalMilliseconds;
+                    }
+                    tiempoTranscurrido = timer.Elapsed.TotalMilliseconds;
+                    e.actualizarTiempoAcciones(tiempoTranscurrido);
+                    quantumController.Reset();
+
+                    i++;
+                }
+            }
+        }
+
+        public bool DentroDelTiempo(Escena e)
+        {
+            tiempoTranscurrido = timer.Elapsed.TotalMilliseconds;
+            return tiempoTranscurrido < libreto.duracion && tiempoTranscurrido < e.duracion;
         }
 
         public void Run(Libreto libreto)

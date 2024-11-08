@@ -1,8 +1,5 @@
-﻿using OpenTK;
-using ProyectoOpenTk.Estructura3D;
+﻿using ProyectoOpenTk.Estructura3D;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ProyectoOpenTk.EstructuraAnimacion
 {
@@ -16,34 +13,43 @@ namespace ProyectoOpenTk.EstructuraAnimacion
     public class Accion
     {
         //public Transformacion tipo;
-        //public float valor;
-        //public float x;
-        //public float y;
-        //public float z;
+        //public double valor;
+        //public double x;
+        //public double y;
+        //public double z;
         public Transformacion transformacion;
-        public Figura3D elemento;   //En lugar de figura 3d que reciba escenario y nombre ?
+        public Figura3D elemento; 
         public float objetivo;  //30grados, mover 30 en x, escalar +30 en y 
-        public float tiempoInicio;
-        public float duracion;
-        //agregar centro o pivote que usara para la transformacion ?
-        //public Vertice pivote;
-        public bool iniciado = false;
+        public double tiempoInicio; //Con respecto al tiempo global, la duracion del libreto
+        public double duracion;
 
-        public Accion(Transformacion transformacion, Figura3D elemento, float objetivo, float tiempoInicio, float duracion) //, Vertice pivote
+        public bool iniciado = false;
+        public float objetivoRestante;
+        public double tiempoRestante;
+
+        public Accion(Transformacion transformacion, Figura3D elemento, float objetivo, double tiempoInicio, double duracion)
         {
             this.transformacion = transformacion;
             this.elemento = elemento;
             this.objetivo = objetivo;
             this.tiempoInicio = tiempoInicio;
             this.duracion = duracion;
-            //this.pivote = pivote;
+            objetivoRestante = objetivo;
+            tiempoRestante = duracion;
         }
 
         public void Apply(float step)
         {
-            //elemento.centro = pivote;
             iniciado = true;
             objetivo -= step;
+            transformacion.Apply(elemento, step);
+        }
+
+        public void Run(float fps)
+        {
+            //calcular una vez y no todo el tiempo o sino calcular cada 1 seg por ejemplo
+            float step = (float)(objetivoRestante / (fps * tiempoRestante));
+            objetivoRestante -= step;
             transformacion.Apply(elemento, step);
         }
     }
